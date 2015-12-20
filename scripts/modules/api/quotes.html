@@ -1,0 +1,13 @@
+
+<div class="row">
+	<div class="col-md-6">
+		<div class="form-group">
+			<label>Symbol to quote</label>
+			<input type="text" ng-model="symbols" class="form-control" placeholder="MSFT" />
+		</div>
+		<button type="button" class="btn btn-primary" ng-click="getQuote()">Get Quote</button>
+	</div>
+	<div class="col-md-6">
+		{{quotes || 'Quotes appear here'}}
+	</div>
+</div>

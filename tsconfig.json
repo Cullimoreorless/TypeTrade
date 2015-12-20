@@ -1,0 +1,8 @@
+{
+	"compilerOptions": {
+		"module": "amd",
+		"noImplicitAny": false,
+		"removeComments": false,
+		"sourceMap": true
+	}
+}
