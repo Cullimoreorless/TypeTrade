@@ -3,9 +3,6 @@ module UrlBuilder{
 	export function getQuotes(symbols:string):string{
 		return 'markets/quotes?symbols='+symbols;
 	};
-	export function getQuotes(symbols:string[]):string{
-		return 'markets/quotes?symbols='+symbols.join();
-	};
 	export function searchCompany(query:string, includeIndex:boolean):string{
 		if(!includeIndex)
 			includeIndex = false;

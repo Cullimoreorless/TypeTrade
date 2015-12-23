@@ -1,4 +1,3 @@
-///<reference path="../../../TypeDefinitionFiles/angular.d.ts" />
 module tradierApp{
 	'use strict';
 	interface ISearchCompanyScope extends ng.IScope{

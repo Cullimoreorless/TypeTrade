@@ -1,4 +1,3 @@
-/// <reference path="../../../TypeDefinitionFiles/angular.d.ts" />
 /// <reference path="../../helper.ts" />
 module tradierApp{
 	'use strict';

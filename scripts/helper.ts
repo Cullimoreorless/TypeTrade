@@ -1,4 +1,3 @@
-///<reference path="../TypeDefinitionFiles/angular.d.ts"/>
 module Helpers{
 	export var authToken:string = 'eeRpHhQdzrrHdyukEdib4fRngdFF';
 	export var baseApiUrl:string = "https://sandbox.tradier.com/v1/";
@@ -8,7 +7,7 @@ module Helpers{
 	};
 }
 module tradierApp{
-	export interface IHttpResponse extends angular.IHttpPromiseCallbackArg<any> {
+	export interface IHttpResponse extends ng.IHttpPromiseCallbackArg<any> {
 		data:any;
 	}
 }

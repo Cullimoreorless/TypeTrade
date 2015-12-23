@@ -1,5 +1,4 @@
-///<reference path="../../../TypeDefinitionFiles/angular.d.ts" />
-///<reference path="../../urlBuilders/marketUrlBuilders.ts" />
+///<reference path="../commonUtil/urlBuilders/marketUrlBuilders.ts" />
 module tradierApp{
 	export interface IQuoteCtrlScope extends angular.IScope{
 		getQuote:()=> void;

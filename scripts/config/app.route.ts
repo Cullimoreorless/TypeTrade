@@ -1,4 +1,3 @@
-///<reference path="../../TypeDefinitionFiles/angular.d.ts"/>
 (function(angular){
 	'use strict';
 	angular.module('tradeApp').config(['$routeProvider',

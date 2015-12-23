@@ -96,7 +96,7 @@ var tradierApp;
         return {
             controller: "searchCompanyController",
             restrict: "E",
-            templateUrl: "../TypeTrade/scripts/modules/commonUtil/searchCompany.html",
+            templateUrl: "/scripts/modules/commonUtil/searchCompany.html",
             replace: true
         };
     }
