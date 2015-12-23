@@ -1,0 +1,23 @@
+{
+  "name": "typetrade",
+  "version": "1.0.0",
+  "description": "Day trading JS app",
+  "main": "index.html",
+  "dependencies": {},
+  "devDependencies": {
+    "gulp": "^3.9.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cullimoreorless/TypeTrade.git"
+  },
+  "author": "amc",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Cullimoreorless/TypeTrade/issues"
+  },
+  "homepage": "https://github.com/Cullimoreorless/TypeTrade#readme"
+}

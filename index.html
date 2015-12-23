@@ -1,10 +1,29 @@
 <html>
 	<head>
 		<link type="text/css" rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
-		<script type="text/javascript" src="scripts/helper.js" />
+		<script src="scripts/jquery/jquery-2.1.4.min.js" ></script>
+		<script src="scripts/angular/angular.min.js" ></script>
+		<script src="scripts/angular/angular-route.js"></script>
+		
+		<script src="release/js/mainJS.js" ></script>
 	</head>
 	<body>
-		<div class="container" ng-app="tradierApp">
+		<div class="container" ng-app="tradeApp">
+			<div ng-controller="quotesController">
+				<search-company></search-company>
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>Symbol to quote</label>
+							<input type="text" ng-model="symbols" class="form-control" placeholder="MSFT" />
+						</div>
+						<button type="button" class="btn btn-primary" ng-click="getQuote()">Get Quote</button>
+					</div>
+					<div class="col-md-6">
+						{{quotes ? quotes : 'Quotes appear here'}}
+					</div>
+				</div>
+			</div>
 		</div>
 	</body>
 </html>

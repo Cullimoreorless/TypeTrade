@@ -1,8 +1,8 @@
-/// <reference path="../../TypeDefinitionFiles/angular.d.ts" />
-/// <reference path="../helper.ts" />
+///<reference path="../../TypeDefinitionFiles/angular.d.ts"/>
+///<reference path="../helper.ts" />
 (function(angular){
 	'use strict';
-	angular.module('tradierApp').config(['$httpProvider', function($httpProvider){
+	angular.module('tradeApp').config(['$httpProvider', function($httpProvider){
 		$httpProvider.interceptors.push(['$q','$window','$location',
 			function($q, $window, $location){
 				return {

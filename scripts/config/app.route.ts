@@ -1,6 +1,7 @@
-(function(){
+///<reference path="../../TypeDefinitionFiles/angular.d.ts"/>
+(function(angular){
 	'use strict';
-	angular.module('tradierApp').config(['$routeProvider',
+	angular.module('tradeApp').config(['$routeProvider',
 		function($routeProvider){
 			$routeProvider.when('quotes',{
 				templateUrl:'/scripts/modules/api/quotes.html',
@@ -9,4 +10,4 @@
 		}
 	]);
 	
-})();
+})(angular);

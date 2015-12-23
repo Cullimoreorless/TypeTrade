@@ -1,0 +1,35 @@
+<div class="row">
+	<div class="col-md-6">
+		<div class="form-group">
+			<label>Search companies</label>
+			<input type="text" class="form-control" ng-model="query" />
+		</div>
+		<div class="form-group">
+			<label>
+				<input type="checkbox" ng-model="includeIndexes" /> Include indexes
+			</label>
+		</div>
+		<button type="button" ng-click="searchCompany()" class="btn btn-primary">Search</button>
+	</div>
+	<div class="col-md-6">
+		{{securities}}
+		<table>
+			<thead>
+				<tr>
+					<th>Symbol</th>
+					<th>Description</th>
+					<th>Type</th>
+					<th>Exchange</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="sec in securities">
+					<td>{{sec.symbol}}</td>
+					<td>{{sec.description}}</td>
+					<td>{{sec.type}}</td>
+					<td>{{sec.exchange}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
