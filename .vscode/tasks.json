@@ -7,6 +7,11 @@
     ],
     "tasks": [
 		{
+			"taskName":"scriptsEmitWithError",
+			"isBuildCommand": true,
+			"showOutput": "always"	
+		},
+		{
 			"taskName": "scripts",
 			"isBuildCommand": true,
 			"showOutput": "always"

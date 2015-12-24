@@ -1,13 +1,46 @@
 
-<div class="row">
-	<div class="col-md-6">
-		<div class="form-group">
-			<label>Symbol to quote</label>
-			<input type="text" ng-model="symbols" class="form-control" placeholder="MSFT" />
+<div>
+	<search-company symbols="symbols"></search-company>
+	<h3>Get Quotes</h3>
+	<div class="row">
+		<div class="col-md-4">
+			<form ng-submit="getQuote()">
+				<div class="form-group">
+					<label>Symbols (comma separated)</label>
+					<input type="text" ng-model="symbols" class="form-control" placeholder="e.g. MSFT,AAPL" />
+				</div>
+				<button type="submit" class="btn btn-primary" >Get Quote</button>
+			</form>
 		</div>
-		<button type="button" class="btn btn-primary" ng-click="getQuote()">Get Quote</button>
-	</div>
-	<div class="col-md-6">
-		{{quotes || 'Quotes appear here'}}
+		<div class="col-md-8">
+			<table style="width:100%" class="table-striped table-hover table-responsive">
+				<thead>
+					<tr>
+						<th>Symbol</th>
+						<th>Type</th>
+						<th>Last</th>
+						<th>Change</th>
+						<th>Change %</th>
+						<th>Open</th>
+						<th>High</th>
+						<th>Low</th>
+						<th>Close</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="quote in quotes">
+						<td>{{quote.symbol}}</td>
+						<td>{{quote.type}}</td>
+						<td>{{quote.last}}</td>
+						<td>{{quote.change}}</td>
+						<td>{{quote.change_percentage}}</td>
+						<td>{{quote.open}}</td>
+						<td>{{quote.high}}</td>
+						<td>{{quote.low}}</td>
+						<td>{{quote.close}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	</div>
 </div>

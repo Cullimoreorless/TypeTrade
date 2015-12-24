@@ -8,22 +8,10 @@
 		<script src="release/js/mainJS.js" ></script>
 	</head>
 	<body>
+		<h3>Trade App</h3>
 		<div class="container" ng-app="tradeApp">
-			<div ng-controller="quotesController">
-				<search-company></search-company>
-				<div class="row">
-					<div class="col-md-6">
-						<div class="form-group">
-							<label>Symbol to quote</label>
-							<input type="text" ng-model="symbols" class="form-control" placeholder="MSFT" />
-						</div>
-						<button type="button" class="btn btn-primary" ng-click="getQuote()">Get Quote</button>
-					</div>
-					<div class="col-md-6">
-						{{quotes ? quotes : 'Quotes appear here'}}
-					</div>
-				</div>
-			</div>
+			<!--App windows go here-->
+			<div ng-view></div>
 		</div>
 	</body>
 </html>

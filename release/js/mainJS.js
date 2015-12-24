@@ -1,4 +1,3 @@
-///<reference path="../TypeDefinitionFiles/angular.d.ts"/>
 var Helpers;
 (function (Helpers) {
     Helpers.authToken = 'eeRpHhQdzrrHdyukEdib4fRngdFF';
@@ -9,7 +8,6 @@ var Helpers;
     }
     ;
 })(Helpers || (Helpers = {}));
-/// <reference path="/Users/hoseratheart/TypeTrade/TypeDefinitionFiles/angular.d.ts" />
 var tradierApp;
 (function (tradierApp) {
     (function () {
@@ -17,7 +15,6 @@ var tradierApp;
         angular.module('tradeApp', ['ngRoute']);
     })();
 })(tradierApp || (tradierApp = {}));
-///<reference path="../../TypeDefinitionFiles/angular.d.ts"/>
 ///<reference path="../helper.ts" />
 (function (angular) {
     'use strict';
@@ -37,19 +34,17 @@ var tradierApp;
             ]);
         }]);
 })(angular);
-///<reference path="../../TypeDefinitionFiles/angular.d.ts"/>
 (function (angular) {
     'use strict';
     angular.module('tradeApp').config(['$routeProvider',
         function ($routeProvider) {
-            $routeProvider.when('quotes', {
-                templateUrl: '/scripts/modules/api/quotes.html',
+            $routeProvider.when('/quotes', {
+                templateUrl: '/scripts/modules/market/quotes.html',
                 controller: 'quotesController'
             });
         }
     ]);
 })(angular);
-/// <reference path="../../../TypeDefinitionFiles/angular.d.ts" />
 /// <reference path="../../helper.ts" />
 var tradierApp;
 (function (tradierApp) {
@@ -74,7 +69,6 @@ var tradierApp;
             .service('httpCallsService', HttpCallsService);
     })(angular);
 })(tradierApp || (tradierApp = {}));
-///<reference path="../../../TypeDefinitionFiles/angular.d.ts" />
 var tradierApp;
 (function (tradierApp) {
     'use strict';
@@ -82,10 +76,21 @@ var tradierApp;
         function SearchCompanyController(httpCallsService, $scope) {
             this.httpCallsService = httpCallsService;
             this.$scope = $scope;
-            $scope.searchCompany = function () {
+            $scope.symbols = "";
+            $scope.searchCompanies = function () {
                 httpCallsService.get(UrlBuilder.searchCompany($scope.query, $scope.includeIndexes), function (response) {
-                    $scope.securities = response.data.securities;
+                    $scope.securities = [];
+                    var sec = response.data.securities.security;
+                    if (Array.isArray(sec))
+                        $scope.securities = sec;
+                    else
+                        $scope.securities.push(sec);
                 });
+            };
+            $scope.addSymbol = function (newSymbol) {
+                if ($scope.symbols.length != 0)
+                    $scope.symbols += ',';
+                $scope.symbols += newSymbol;
             };
         }
         SearchCompanyController.$inject = ['httpCallsService', '$scope'];
@@ -96,6 +101,9 @@ var tradierApp;
         return {
             controller: "searchCompanyController",
             restrict: "E",
+            scope: {
+                symbols: "="
+            },
             templateUrl: "/scripts/modules/commonUtil/searchCompany.html",
             replace: true
         };
@@ -123,8 +131,7 @@ var UrlBuilder;
     UrlBuilder.searchCompany = searchCompany;
     ;
 })(UrlBuilder || (UrlBuilder = {}));
-///<reference path="../../../TypeDefinitionFiles/angular.d.ts" />
-///<reference path="../../urlBuilders/marketUrlBuilders.ts" />
+///<reference path="../commonUtil/urlBuilders/marketUrlBuilders.ts" />
 var tradierApp;
 (function (tradierApp) {
     var QuotesController = (function () {
@@ -136,7 +143,12 @@ var tradierApp;
                 if (!$scope.symbols)
                     $scope.symbols = 'MSFT';
                 httpCallsService.get(UrlBuilder.getQuotes($scope.symbols), function (response) {
-                    $scope.quotes = response.data;
+                    $scope.quotes = [];
+                    var q = response.data.quotes.quote;
+                    if (Array.isArray(q))
+                        $scope.quotes = q;
+                    else
+                        $scope.quotes.push(q);
                 });
             };
         }

@@ -1,5 +1,5 @@
 module tradierApp{
-	interface QuoteResponse{
+	export interface IQuoteResponse{
 		symbol:string;
 		description:string;
 		exch:string; //Exchange

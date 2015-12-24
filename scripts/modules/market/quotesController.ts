@@ -2,9 +2,8 @@
 module tradierApp{
 	export interface IQuoteCtrlScope extends angular.IScope{
 		getQuote:()=> void;
-		symbols?:any;
-		quotes?:Object;
-		
+		symbols:string;
+		quotes?:IQuoteResponse[];
 	}
 	export class QuotesController{
 		public static $inject = ['$scope','httpCallsService','$rootScope'];
@@ -12,7 +11,12 @@ module tradierApp{
 			$scope.getQuote = function(){
 				if(!$scope.symbols) $scope.symbols='MSFT';
 				httpCallsService.get(UrlBuilder.getQuotes($scope.symbols), function(response:IHttpResponse){
-					$scope.quotes = response.data;
+					$scope.quotes = [];
+					var q = response.data.quotes.quote;
+					if(Array.isArray(q))
+						$scope.quotes = q;
+					else
+						$scope.quotes.push(q);
 				});
 			}
 		}
