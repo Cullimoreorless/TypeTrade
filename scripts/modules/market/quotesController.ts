@@ -7,16 +7,12 @@ module tradierApp{
 	}
 	export class QuotesController{
 		public static $inject = ['$scope','httpCallsService','$rootScope'];
-		constructor(private $scope:IQuoteCtrlScope, private httpCallsService: HttpCallsService, private $rootScope : angular.IRootScopeService){
+		constructor(private $scope:IQuoteCtrlScope, 
+					private httpCallsService: HttpCallsService, 
+					private $rootScope : angular.IRootScopeService){
 			$scope.getQuote = function(){
-				if(!$scope.symbols) $scope.symbols='MSFT';
 				httpCallsService.get(UrlBuilder.getQuotes($scope.symbols), function(response:IHttpResponse){
-					$scope.quotes = [];
-					var q = response.data.quotes.quote;
-					if(Array.isArray(q))
-						$scope.quotes = q;
-					else
-						$scope.quotes.push(q);
+					$scope.quotes = Helpers.getArray(response.data.quotes.quote);
 				});
 			}
 		}

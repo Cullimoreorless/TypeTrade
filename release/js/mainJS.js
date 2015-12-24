@@ -7,12 +7,35 @@ var Helpers;
         Helpers.authToken = 'eeRpHhQdzrrHdyukEdib4fRngdFF';
     }
     ;
+    function setOrPushArray(arrayToSet, result) {
+        arrayToSet = [];
+        if (Array.isArray(result))
+            arrayToSet = result;
+        else
+            arrayToSet.push(result);
+    }
+    Helpers.setOrPushArray = setOrPushArray;
+    function getArray(resultSet) {
+        var rtnArray = [];
+        if (Array.isArray(resultSet))
+            return resultSet;
+        else {
+            rtnArray.push(resultSet);
+            return rtnArray;
+        }
+    }
+    Helpers.getArray = getArray;
+    function getISODateString(date) {
+        var year = date.getFullYear().toString(), month = date.getMonth() + 1, day = date.getDate();
+        return year + '-' + (month < 10 ? '0' + month : month) + '-' + (day < 10 ? '0' + day : day);
+    }
+    Helpers.getISODateString = getISODateString;
 })(Helpers || (Helpers = {}));
 var tradierApp;
 (function (tradierApp) {
     (function () {
         'use strict';
-        angular.module('tradeApp', ['ngRoute']);
+        angular.module('tradeApp', ['ngRoute', 'ui.bootstrap']);
     })();
 })(tradierApp || (tradierApp = {}));
 ///<reference path="../helper.ts" />
@@ -41,6 +64,9 @@ var tradierApp;
             $routeProvider.when('/quotes', {
                 templateUrl: '/scripts/modules/market/quotes.html',
                 controller: 'quotesController'
+            }).when('/marketHistory', {
+                templateUrl: '/scripts/modules/market/marketHistory.html',
+                controller: 'marketHistoryController'
             });
         }
     ]);
@@ -79,12 +105,7 @@ var tradierApp;
             $scope.symbols = "";
             $scope.searchCompanies = function () {
                 httpCallsService.get(UrlBuilder.searchCompany($scope.query, $scope.includeIndexes), function (response) {
-                    $scope.securities = [];
-                    var sec = response.data.securities.security;
-                    if (Array.isArray(sec))
-                        $scope.securities = sec;
-                    else
-                        $scope.securities.push(sec);
+                    $scope.securities = Helpers.getArray(response.data.securities.security);
                 });
             };
             $scope.addSymbol = function (newSymbol) {
@@ -130,7 +151,46 @@ var UrlBuilder;
     }
     UrlBuilder.searchCompany = searchCompany;
     ;
+    function getHistory(symbol, interval, start, end) {
+        return 'markets/history?symbol=' + symbol + (interval ? '&interval=' + interval : '') + (start ? '&start=' + start : '') + (end ? '&end=' + end : '');
+    }
+    UrlBuilder.getHistory = getHistory;
 })(UrlBuilder || (UrlBuilder = {}));
+///<reference path="../commonUtil/urlBuilders/marketUrlBuilders.ts" />
+///<reference path="../../helper.ts"/>
+var tradierApp;
+(function (tradierApp) {
+    var MarketHistoryController = (function () {
+        function MarketHistoryController($scope, httpCallsService) {
+            this.$scope = $scope;
+            this.httpCallsService = httpCallsService;
+            $scope.endOpen = false;
+            $scope.startOpen = false;
+            $scope.today = new Date();
+            $scope.open = function (type, event) {
+                switch (type) {
+                    case 'sd':
+                        $scope.startOpen = true;
+                        $scope.endOpen = false;
+                        break;
+                    case 'ed':
+                        $scope.startOpen = false;
+                        $scope.endOpen = true;
+                        break;
+                }
+            };
+            $scope.getHistory = function () {
+                var start = Helpers.getISODateString($scope.startDate), end = Helpers.getISODateString($scope.endDate);
+                httpCallsService.get(UrlBuilder.getHistory($scope.symbol, $scope.interval, start, end), function (response) {
+                    $scope.history = Helpers.getArray(response.data.history.day);
+                });
+            };
+        }
+        return MarketHistoryController;
+    })();
+    tradierApp.MarketHistoryController = MarketHistoryController;
+    angular.module('tradeApp').controller('marketHistoryController', MarketHistoryController);
+})(tradierApp || (tradierApp = {}));
 ///<reference path="../commonUtil/urlBuilders/marketUrlBuilders.ts" />
 var tradierApp;
 (function (tradierApp) {
@@ -140,15 +200,8 @@ var tradierApp;
             this.httpCallsService = httpCallsService;
             this.$rootScope = $rootScope;
             $scope.getQuote = function () {
-                if (!$scope.symbols)
-                    $scope.symbols = 'MSFT';
                 httpCallsService.get(UrlBuilder.getQuotes($scope.symbols), function (response) {
-                    $scope.quotes = [];
-                    var q = response.data.quotes.quote;
-                    if (Array.isArray(q))
-                        $scope.quotes = q;
-                    else
-                        $scope.quotes.push(q);
+                    $scope.quotes = Helpers.getArray(response.data.quotes.quote);
                 });
             };
         }

@@ -8,4 +8,7 @@ module UrlBuilder{
 			includeIndex = false;
 		return 'markets/search?q='+query+'&indexes='+includeIndex.toString();
 	};
+	export function getHistory(symbol:string, interval?:string, start?:string, end?:string):string{
+		return 'markets/history?symbol='+symbol+(interval ? '&interval='+interval:'')+(start ? '&start='+start:'')+(end ? '&end='+end:'');
+	}
 }

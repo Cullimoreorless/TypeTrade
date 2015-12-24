@@ -14,12 +14,7 @@ module tradierApp{
 			$scope.symbols = "";
 			$scope.searchCompanies = function():void{
 				httpCallsService.get(UrlBuilder.searchCompany($scope.query, $scope.includeIndexes), function(response){
-					$scope.securities = [];
-					var sec = response.data.securities.security;
-					if(Array.isArray(sec))
-						$scope.securities = sec;
-					else
-						$scope.securities.push(sec);
+					$scope.securities = Helpers.getArray(response.data.securities.security);
 				});
 			};
 			$scope.addSymbol = function(newSymbol:string){
