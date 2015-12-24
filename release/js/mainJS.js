@@ -35,10 +35,10 @@ var tradierApp;
 (function (tradierApp) {
     (function () {
         'use strict';
-        angular.module('tradeApp', ['ngRoute', 'ui.bootstrap']);
+        angular.module('tradeApp', ['ngRoute', 'ui.bootstrap', 'n3-line-chart']);
     })();
 })(tradierApp || (tradierApp = {}));
-///<reference path="../helper.ts" />
+///<reference path="../../helper.ts" />
 (function (angular) {
     'use strict';
     angular.module('tradeApp').config(['$httpProvider', function ($httpProvider) {
@@ -61,40 +61,16 @@ var tradierApp;
     'use strict';
     angular.module('tradeApp').config(['$routeProvider',
         function ($routeProvider) {
-            $routeProvider.when('/quotes', {
-                templateUrl: '/scripts/modules/market/quotes.html',
+            $routeProvider.when('/market/quotes', {
+                templateUrl: '/scripts/app/modules/market/quotes.html',
                 controller: 'quotesController'
-            }).when('/marketHistory', {
-                templateUrl: '/scripts/modules/market/marketHistory.html',
+            }).when('/market/history', {
+                templateUrl: '/scripts/app/modules/market/marketHistory.html',
                 controller: 'marketHistoryController'
             });
         }
     ]);
 })(angular);
-/// <reference path="../../helper.ts" />
-var tradierApp;
-(function (tradierApp) {
-    'use strict';
-    var HttpCallsService = (function () {
-        function HttpCallsService($http) {
-            this.$http = $http;
-            this.http = $http;
-        }
-        ;
-        HttpCallsService.prototype.get = function (url, callback) {
-            this.http.get(Helpers.baseApiUrl + url).then(function (response) {
-                callback(response);
-            }, function (reason) { alert(reason); });
-        };
-        HttpCallsService.$inject = ['$http'];
-        return HttpCallsService;
-    })();
-    tradierApp.HttpCallsService = HttpCallsService;
-    (function (angular) {
-        angular.module('tradeApp')
-            .service('httpCallsService', HttpCallsService);
-    })(angular);
-})(tradierApp || (tradierApp = {}));
 var tradierApp;
 (function (tradierApp) {
     'use strict';
@@ -125,7 +101,7 @@ var tradierApp;
             scope: {
                 symbols: "="
             },
-            templateUrl: "/scripts/modules/commonUtil/searchCompany.html",
+            templateUrl: "/scripts/app/directives/searchCompany.html",
             replace: true
         };
     }
@@ -156,8 +132,9 @@ var UrlBuilder;
     }
     UrlBuilder.getHistory = getHistory;
 })(UrlBuilder || (UrlBuilder = {}));
-///<reference path="../commonUtil/urlBuilders/marketUrlBuilders.ts" />
-///<reference path="../../helper.ts"/>
+///<reference path="../../utilities/urlBuilders/marketUrlBuilders.ts" />
+///<reference path="../../utilities/commonInterfaces.ts"/>
+///<reference path="../../../helper.ts"/>
 var tradierApp;
 (function (tradierApp) {
     var MarketHistoryController = (function () {
@@ -182,7 +159,15 @@ var tradierApp;
             $scope.getHistory = function () {
                 var start = Helpers.getISODateString($scope.startDate), end = Helpers.getISODateString($scope.endDate);
                 httpCallsService.get(UrlBuilder.getHistory($scope.symbol, $scope.interval, start, end), function (response) {
-                    $scope.history = Helpers.getArray(response.data.history.day);
+                    if (response.data.history) {
+                        $scope.history = Helpers.getArray(response.data.history.day);
+                        $scope.graphData = {
+                            "dataset": $scope.history
+                        };
+                        $scope.graphOptions = null;
+                    }
+                    else
+                        alert('No history found');
                 });
             };
         }
@@ -191,7 +176,7 @@ var tradierApp;
     tradierApp.MarketHistoryController = MarketHistoryController;
     angular.module('tradeApp').controller('marketHistoryController', MarketHistoryController);
 })(tradierApp || (tradierApp = {}));
-///<reference path="../commonUtil/urlBuilders/marketUrlBuilders.ts" />
+///<reference path="../../utilities/urlBuilders/marketUrlBuilders.ts" />
 var tradierApp;
 (function (tradierApp) {
     var QuotesController = (function () {
@@ -212,6 +197,30 @@ var tradierApp;
     (function (angular) {
         angular.module('tradeApp')
             .controller('quotesController', QuotesController);
+    })(angular);
+})(tradierApp || (tradierApp = {}));
+/// <reference path="../../helper.ts" />
+var tradierApp;
+(function (tradierApp) {
+    'use strict';
+    var HttpCallsService = (function () {
+        function HttpCallsService($http) {
+            this.$http = $http;
+            this.http = $http;
+        }
+        ;
+        HttpCallsService.prototype.get = function (url, callback) {
+            this.http.get(Helpers.baseApiUrl + url).then(function (response) {
+                callback(response);
+            }, function (reason) { alert(reason); });
+        };
+        HttpCallsService.$inject = ['$http'];
+        return HttpCallsService;
+    })();
+    tradierApp.HttpCallsService = HttpCallsService;
+    (function (angular) {
+        angular.module('tradeApp')
+            .service('httpCallsService', HttpCallsService);
     })(angular);
 })(tradierApp || (tradierApp = {}));
 //# sourceMappingURL=mainJS.js.map

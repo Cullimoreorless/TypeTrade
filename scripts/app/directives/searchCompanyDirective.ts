@@ -31,7 +31,7 @@ module tradierApp{
 			scope:{
 				symbols:"="
 			},
-			templateUrl:"/scripts/modules/commonUtil/searchCompany.html",
+			templateUrl:"/scripts/app/directives/searchCompany.html",
 			replace:true
 		}
 	}

@@ -1,5 +1,6 @@
-///<reference path="../commonUtil/urlBuilders/marketUrlBuilders.ts" />
-///<reference path="../../helper.ts"/>
+///<reference path="../../utilities/urlBuilders/marketUrlBuilders.ts" />
+///<reference path="../../utilities/commonInterfaces.ts"/>
+///<reference path="../../../helper.ts"/>
 module tradierApp{
 	interface IMarketHistoryScope extends ng.IScope{
 		symbol:string;
@@ -11,6 +12,8 @@ module tradierApp{
 		endOpen:boolean;
 		startOpen:boolean;
 		today:Date;
+		graphData:Object;
+		graphOptions:IGraphOptions;
 		open(type:string, event:any):void;
 	}
 	
@@ -36,7 +39,15 @@ module tradierApp{
 					end = Helpers.getISODateString($scope.endDate);
 				httpCallsService.get(UrlBuilder.getHistory($scope.symbol, $scope.interval, start, end),
 					function(response){
-						$scope.history = Helpers.getArray(response.data.history.day);
+						if(response.data.history){
+							$scope.history = Helpers.getArray(response.data.history.day);
+							$scope.graphData = {
+								"dataset": $scope.history
+							};
+							$scope.graphOptions = null;
+						}
+						else
+							alert('No history found');
 					}
 				);
 			};

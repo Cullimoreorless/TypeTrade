@@ -1,4 +1,4 @@
-///<reference path="../helper.ts" />
+///<reference path="../../helper.ts" />
 (function(angular){
 	'use strict';
 	angular.module('tradeApp').config(['$httpProvider', function($httpProvider){

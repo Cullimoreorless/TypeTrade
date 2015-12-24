@@ -28,8 +28,3 @@ module Helpers{
 		return year+'-'+(month < 10 ? '0'+month: month)+'-'+(day < 10 ? '0'+day:day);
 	}
 }
-module tradierApp{
-	export interface IHttpResponse extends ng.IHttpPromiseCallbackArg<any> {
-		data:any;
-	}
-}
