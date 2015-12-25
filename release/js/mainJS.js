@@ -161,10 +161,40 @@ var tradierApp;
                 httpCallsService.get(UrlBuilder.getHistory($scope.symbol, $scope.interval, start, end), function (response) {
                     if (response.data.history) {
                         $scope.history = Helpers.getArray(response.data.history.day);
+                        for (var i = $scope.history.length - 1; i >= 0; i--) {
+                            $scope.history[i].trueDate = new Date((new Date($scope.history[i].date)).setHours(12));
+                        }
                         $scope.graphData = {
                             "dataset": $scope.history
                         };
-                        $scope.graphOptions = null;
+                        $scope.graphOptions = {
+                            margin: { top: 5 },
+                            series: [
+                                {
+                                    axis: "y",
+                                    dataset: "dataset",
+                                    label: "Close",
+                                    color: "#000",
+                                    key: "close",
+                                    type: ['line', 'dot'],
+                                    id: "close_numbers"
+                                },
+                                {
+                                    axis: "y",
+                                    dataset: "dataset",
+                                    label: "High/Low Range",
+                                    color: 'lightgreen',
+                                    key: { y0: 'low', y1: 'high' },
+                                    type: ['area'],
+                                    id: 'high_low_range'
+                                }],
+                            axes: {
+                                x: {
+                                    key: "trueDate",
+                                    type: "date"
+                                }
+                            }
+                        };
                     }
                     else
                         alert('No history found');

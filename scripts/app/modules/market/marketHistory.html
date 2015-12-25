@@ -12,29 +12,28 @@
 						<option value="">-- Select Interval --<option>
 					</select>
 				</div>
-				<div class="input-group">
+				<p class="input-group">
 					<label>Start Date</label>
 					<input type="text" class="form-control" required uib-datepicker-popup="MM/dd/yyyy" ng-model="startDate" is-open="startOpen" 
 							max-date="today" show-weeks="false" show-button-bar="false" />
 					<span class="input-group-btn">
 						<button type="button" class="btn btn-default" ng-click="open('sd',$event)"><i class="glyphicon glyphicon-calendar"></i></button>
 					</span>
-				</div>
-				<div class="input-group">
+				</p>
+				<p class="input-group">
 					<label>End Date</label>
 					<input type="text" class="form-control" required uib-datepicker-popup="MM/dd/yyyy" ng-model="endDate" is-open="endOpen" 
 							max-date="today" show-weeks="false" show-button-bar="false" />
 					<span class="input-group-btn">
 						<button type="button" class="btn btn-default" ng-click="open('ed', $event)"><i class="glyphicon glyphicon-calendar"></i></button>
 					</span>
-				</div>
+				</p>
 				<br />
 				<button type="submit" class="btn btn-primary">Get History</button>
 			</form>
 		</div>
 		<div class="col-md-8">
 			<linechart data="graphData" options="graphOptions"></linechart>
-			{{history}}
 		</div>
 	</div>
 </div>
