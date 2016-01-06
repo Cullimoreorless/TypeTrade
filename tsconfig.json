@@ -1,9 +1,14 @@
 {
 	"compilerOptions": {
-		"target": "ES5",
+		"target": "es5",
 		"module": "commonjs",
 		"noImplicitAny": false,
 		"removeComments": false,
-		"sourceMap": true
-	}
+		"sourceMap": true,
+    "rootDir": "scripts",
+    "out":"scripts/release/js/mainJS.js"
+	},
+  "exclude":[
+    "node_modules"
+  ]
 }

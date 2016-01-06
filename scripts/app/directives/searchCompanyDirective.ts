@@ -5,8 +5,9 @@ module tradierApp{
 		query:string;
 		includeIndexes:boolean;
 		securities:Security[];
-		addSymbol(newSymbol:string):void;
 		symbols:string;
+    symbolAction:(newSymbol:string)=>void;
+    clickSymbol:(newSymbol:string)=>void;
 	}
 	export class SearchCompanyController{
 		public static $inject = ['httpCallsService','$scope'];
@@ -14,14 +15,12 @@ module tradierApp{
 			$scope.symbols = "";
 			$scope.searchCompanies = function():void{
 				httpCallsService.get(UrlBuilder.searchCompany($scope.query, $scope.includeIndexes), function(response){
-					$scope.securities = Helpers.getArray(response.data.securities.security);
+					$scope.securities = common.getArray(response.data.securities.security);
 				});
 			};
-			$scope.addSymbol = function(newSymbol:string){
-				if($scope.symbols.length != 0)
-					$scope.symbols += ',';
-				$scope.symbols += newSymbol;
-			}
+      $scope.clickSymbol = function (newSymbol:string){
+        $scope.symbolAction(newSymbol);
+      }
 		}
 	}
 	export function searchCompany():ng.IDirective{
@@ -29,9 +28,9 @@ module tradierApp{
 			controller:"searchCompanyController",
 			restrict:"E",
 			scope:{
-				symbols:"="
+				symbolAction:'='
 			},
-			templateUrl:"/scripts/app/directives/searchCompany.html",
+			templateUrl:"/scripts/app/directives/searchCompany.html?1",
 			replace:true
 		}
 	}

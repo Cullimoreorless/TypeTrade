@@ -1,4 +1,4 @@
-///<reference path="../../helper.ts" />
+///<reference path="../../common.ts" />
 (function(angular){
 	'use strict';
 	angular.module('tradeApp').config(['$httpProvider', function($httpProvider){
@@ -7,7 +7,7 @@
 				return {
 					'request':function(req){
 						req.headers = req.headers || {};
-						if(Helpers.authToken) req.headers.Authorization = 'Bearer ' + Helpers.authToken;
+						if(common.authToken) req.headers.Authorization = 'Bearer ' + common.authToken;
 						req.headers.Accept = 'application/json';
 						return req;
 					}

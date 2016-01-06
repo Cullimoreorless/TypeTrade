@@ -5,10 +5,14 @@
   "main": "index.html",
   "dependencies": {},
   "devDependencies": {
+    "concurrently":"^1.0.0",
     "gulp": "^3.9.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "tsc": "tsc",
+    "tsc:w": "tsc -w",
+    "http":"http-server",
+    "start":"concurrent \"npm run tsc:w\" \"npm run http\""
   },
   "repository": {
     "type": "git",

@@ -1,4 +1,4 @@
-module Helpers{
+module common{
 	export var authToken:string = 'eeRpHhQdzrrHdyukEdib4fRngdFF';
 	export var baseApiUrl:string = "https://sandbox.tradier.com/v1/";
 	function getTradierAuthToken(){
@@ -27,4 +27,8 @@ module Helpers{
 			day = date.getDate();
 		return year+'-'+(month < 10 ? '0'+month: month)+'-'+(day < 10 ? '0'+day:day);
 	}
+  export function addDaysToDate(numberOfDays:number, date:Date){
+    date.setDate(date.getDate() + numberOfDays);
+    return date;
+  }
 }

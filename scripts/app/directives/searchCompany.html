@@ -8,7 +8,7 @@
 		<div class="col-md-4">
 			<form ng-submit="searchCompanies()">
 				<div class="form-group">
-					<label>Search companies</label>
+					<label>Search</label>
 					<input required type="text" class="form-control" placeholder="e.g. microsoft" ng-model="query" />
 				</div>
 				<button type="submit" class="btn btn-primary">Search</button>
@@ -28,7 +28,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr ng-repeat="sec in securities" ng-click="addSymbol(sec.symbol)">
+					<tr ng-repeat="sec in securities" ng-click="clickSymbol(sec.symbol)">
 						<td>{{sec.symbol}}</td>
 						<td>{{sec.description}}</td>
 						<td>{{sec.type}}</td>

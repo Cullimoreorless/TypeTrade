@@ -30,6 +30,11 @@ var common;
         return year + '-' + (month < 10 ? '0' + month : month) + '-' + (day < 10 ? '0' + day : day);
     }
     common.getISODateString = getISODateString;
+    function addDaysToDate(numberOfDays, date) {
+        date.setDate(date.getDate() + numberOfDays);
+        return date;
+    }
+    common.addDaysToDate = addDaysToDate;
 })(common || (common = {}));
 var tradierApp;
 (function (tradierApp) {
@@ -47,8 +52,8 @@ var tradierApp;
                     return {
                         'request': function (req) {
                             req.headers = req.headers || {};
-                            if (Helpers.authToken)
-                                req.headers.Authorization = 'Bearer ' + Helpers.authToken;
+                            if (common.authToken)
+                                req.headers.Authorization = 'Bearer ' + common.authToken;
                             req.headers.Accept = 'application/json';
                             return req;
                         }
@@ -61,7 +66,9 @@ var tradierApp;
     'use strict';
     angular.module('tradeApp').config(['$routeProvider',
         function ($routeProvider) {
-            $routeProvider.when('/market/quotes', {
+            $routeProvider.when('/', {
+                templateUrl: '/scripts/app/modules/dashboard.html'
+            }).when('/market/quotes', {
                 templateUrl: '/scripts/app/modules/market/quotes.html',
                 controller: 'quotesController'
             }).when('/market/history', {
@@ -83,6 +90,9 @@ var tradierApp;
                 httpCallsService.get(UrlBuilder.searchCompany($scope.query, $scope.includeIndexes), function (response) {
                     $scope.securities = common.getArray(response.data.securities.security);
                 });
+            };
+            $scope.clickSymbol = function (newSymbol) {
+                $scope.symbolAction(newSymbol);
             };
         }
         SearchCompanyController.$inject = ['httpCallsService', '$scope'];
@@ -111,14 +121,18 @@ var tradierApp;
 (function (tradierApp) {
     'use strict';
     var SearchCompanyModalController = (function () {
-        function SearchCompanyModalController($modalInstance, $scope) {
-            this.$modalInstance = $modalInstance;
+        function SearchCompanyModalController($uibModalInstance, $scope) {
+            this.$uibModalInstance = $uibModalInstance;
             this.$scope = $scope;
+            $scope.closeWithSymbol = function (newSymbol) {
+                $uibModalInstance.close(newSymbol);
+            };
         }
-        SearchCompanyModalController.$inject = ['$modalInstance', '$scope'];
+        SearchCompanyModalController.$inject = ['$uibModalInstance', '$scope'];
         return SearchCompanyModalController;
     })();
     tradierApp.SearchCompanyModalController = SearchCompanyModalController;
+    angular.module('tradeApp').controller('searchCompanyModalController', SearchCompanyModalController);
 })(tradierApp || (tradierApp = {}));
 var UrlBuilder;
 (function (UrlBuilder) {
@@ -146,13 +160,16 @@ var UrlBuilder;
 var tradierApp;
 (function (tradierApp) {
     var MarketHistoryController = (function () {
-        function MarketHistoryController($scope, httpCallsService, $modal) {
+        function MarketHistoryController($scope, httpCallsService, $uibModal) {
             this.$scope = $scope;
             this.httpCallsService = httpCallsService;
-            this.$modal = $modal;
+            this.$uibModal = $uibModal;
             $scope.endOpen = false;
             $scope.startOpen = false;
             $scope.today = new Date();
+            $scope.endDate = $scope.today;
+            $scope.startDate = new Date();
+            $scope.startDate = common.addDaysToDate(-30, $scope.startDate);
             $scope.open = function (type, event) {
                 switch (type) {
                     case 'sd':
@@ -169,9 +186,15 @@ var tradierApp;
                 $scope.symbol = newSymbol;
             };
             $scope.openSearchCompanyModal = function () {
-                var modal = $modal.open({
+                var modal = $uibModal.open({
                     templateUrl: '/scripts/app/directives/searchCompanyModal.html',
-                    controller: 'searchCompanyModalController'
+                    controller: 'searchCompanyModalController',
+                    size: 'lg'
+                });
+                modal.result.then(function (newSymbol) {
+                    if (newSymbol) {
+                        $scope.symbol = newSymbol;
+                    }
                 });
             };
             $scope.getHistory = function () {
@@ -220,7 +243,7 @@ var tradierApp;
                 });
             };
         }
-        MarketHistoryController.$inject = ['$scope', 'httpCallsService', '$modal'];
+        MarketHistoryController.$inject = ['$scope', 'httpCallsService', '$uibModal'];
         return MarketHistoryController;
     })();
     tradierApp.MarketHistoryController = MarketHistoryController;
@@ -265,7 +288,7 @@ var tradierApp;
         }
         ;
         HttpCallsService.prototype.get = function (url, callback) {
-            this.http.get(Helpers.baseApiUrl + url).then(function (response) {
+            this.http.get(common.baseApiUrl + url).then(function (response) {
                 callback(response);
             }, function (reason) { alert(reason); });
         };

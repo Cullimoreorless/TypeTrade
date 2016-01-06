@@ -1,6 +1,6 @@
 ///<reference path="../../utilities/urlBuilders/marketUrlBuilders.ts" />
 ///<reference path="../../utilities/commonInterfaces.ts"/>
-///<reference path="../../../helper.ts"/>
+///<reference path="../../../common.ts"/>
 module tradierApp{
 	interface IMarketHistoryScope extends ng.IScope{
 		symbol:string;
@@ -15,14 +15,22 @@ module tradierApp{
 		graphData:Object;
 		graphOptions:IGraphOptions;
 		open(type:string, event:any):void;
+		openSearchCompanyModal():void;
+		chooseSymbol(newSymbol:string):void;
 	}
 	
 	export class MarketHistoryController{
-		constructor(private $scope:IMarketHistoryScope, private httpCallsService:HttpCallsService){
+		public static $inject = ['$scope','httpCallsService','$uibModal'];
+		constructor(private $scope:IMarketHistoryScope, 
+					private httpCallsService:HttpCallsService, 
+					private $uibModal:ng.ui.bootstrap.IModalService){
 			$scope.endOpen = false;
 			$scope.startOpen = false;
 			$scope.today = new Date();
-			$scope.open = function(type:string, event:any):void{
+      $scope.endDate = $scope.today;
+      $scope.startDate = new Date();
+      $scope.startDate = common.addDaysToDate(-30, $scope.startDate);
+      $scope.open = function(type:string, event:any):void{
 				switch(type){
 					case 'sd':
 						$scope.startOpen = true;
@@ -34,15 +42,31 @@ module tradierApp{
 						break;
 				}
 			};
+			$scope.chooseSymbol = function(newSymbol:string){
+				$scope.symbol = newSymbol;
+			};
+			$scope.openSearchCompanyModal = function(){
+				var modal = $uibModal.open({
+					templateUrl:'/scripts/app/directives/searchCompanyModal.html',
+					controller:'searchCompanyModalController',
+          size:'lg'
+					//TODO add controller, sort out symbol passing between here, modal, directive within modal
+				});
+        modal.result.then(function(newSymbol){
+          if(newSymbol){
+            $scope.symbol = newSymbol;
+          }
+        })
+			}
 			$scope.getHistory = function(){
-				var start = Helpers.getISODateString($scope.startDate),
-					end = Helpers.getISODateString($scope.endDate);
+				var start = common.getISODateString($scope.startDate),
+					end = common.getISODateString($scope.endDate);
 				httpCallsService.get(UrlBuilder.getHistory($scope.symbol, $scope.interval, start, end),
 					function(response){
 						if(response.data.history){
-							$scope.history = Helpers.getArray(response.data.history.day);
+							$scope.history = common.getArray(response.data.history.day);
 							for(var i = $scope.history.length - 1; i >= 0; i--){
-								$scope.history[i].trueDate = new Date((new Date($scope.history[i].date)).setHours(12));
+								$scope.history[i].trueDate = new Date((new Date($scope.history[i].date)).setUTCHours(12));
 							}
 							$scope.graphData = {
 								"dataset": $scope.history
@@ -51,23 +75,24 @@ module tradierApp{
 								margin:{top:5},
 								series: [
 									{
-									axis:"y",
-									dataset:"dataset",
-									label:"Close",
-									color:"#000",
-									key:"close",
-									type:['line','dot'],
-									id:"close_numbers"
-								},
-								{
-									axis:"y",
-									dataset:"dataset",
-									label:"High/Low Range",
-									color:'lightgreen',
-									key:{y0:'low',y1:'high'},
-									type:['area'],
-									id:'high_low_range'	
-								}],
+										axis:"y", 
+										dataset:"dataset",
+										label:"Close",
+										color:"#000",
+										key:"close", //this series shows the amount for the stock at close of market
+										type:['line','dot'],
+										id:"close_numbers"
+									},
+									{
+										axis:"y",
+										dataset:"dataset",
+										label:"High/Low Range",
+										color:'lightgreen',
+										key:{y0:'low',y1:'high'},
+										type:['area'],
+										id:'high_low_range'	
+									}
+								],
 								axes:{
 									x:{
 										key:"trueDate",

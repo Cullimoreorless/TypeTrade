@@ -1,0 +1,18 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+    {
+      "name": "Launch Chrome Debug",
+      "type": "chrome",
+      "request": "launch",
+      "url":"http://localhost:8080/",
+      "runtimeArgs": [
+        "--new-window",
+        "--user-data-dir=/Users/hoseratheart/ChromeData/",
+        "--remote-debugging-port=9222"
+      ],
+      "webRoot": "scripts",
+      "sourceMaps": true
+    }
+  ]
+}

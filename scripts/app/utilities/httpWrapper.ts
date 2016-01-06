@@ -1,4 +1,4 @@
-/// <reference path="../../helper.ts" />
+/// <reference path="../../common.ts" />
 module tradierApp{
 	'use strict';
 	export class HttpCallsService {
@@ -8,7 +8,7 @@ module tradierApp{
 			this.http = $http;
 		};
 		get(url:string, callback:(response:IHttpResponse)=>void):void{
-			this.http.get(Helpers.baseApiUrl + url).then(function(response){
+			this.http.get(common.baseApiUrl + url).then(function(response){
 				callback(<IHttpResponse>response);
 			}, function(reason) { alert(reason); });
 		}
